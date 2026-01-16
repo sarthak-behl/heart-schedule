@@ -1,0 +1,48 @@
+// HeartSchedule Database Schema
+// Defines User and Message models for emotional message scheduling
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  passwordHash  String    @map("password_hash")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  messages      Message[]
+
+  @@map("users")
+}
+
+model Message {
+  id              String    @id @default(cuid())
+  userId          String    @map("user_id")
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  occasion        String
+  recipientEmail  String    @map("recipient_email")
+  recipientName   String?   @map("recipient_name")
+  subject         String
+  body            String    @db.Text
+
+  scheduledAt     DateTime  @map("scheduled_at")
+  sentAt          DateTime? @map("sent_at")
+  status          String    @default("pending") // pending, sent, failed, cancelled
+
+  isAiGenerated   Boolean   @default(false) @map("is_ai_generated")
+
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([scheduledAt, status])
+  @@map("messages")
+}

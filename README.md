@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HeartSchedule
+
+An emotional, user-centric web app that helps you schedule heartfelt messages for important occasions and automatically sends them at the perfect moment.
+
+## Features
+
+- Choose from various occasions (birthday, anniversary, apology, gratitude, etc.)
+- Write personal messages or AI-generate them
+- Schedule date and time for automatic sending
+- Email sent in your name at the scheduled time
+
+## Tech Stack
+
+- **Frontend**: Next.js 14 (App Router), React, TypeScript, Tailwind CSS, shadcn/ui
+- **Backend**: Next.js API Routes
+- **Database**: PostgreSQL (via Supabase), Prisma ORM
+- **Authentication**: NextAuth.js
+- **Email**: Resend
+- **AI**: OpenAI GPT-4o-mini
+- **Deployment**: Vercel
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ and npm
+- PostgreSQL database (recommended: Supabase free tier)
+- OpenAI API key
+- Resend API key
+
+### Installation
+
+1. Install dependencies
+```bash
+npm install
+```
+
+2. Set up environment variables
+
+Edit `.env.local` and fill in your actual values:
+
+```bash
+# Database - Get this from Supabase
+DATABASE_URL="postgresql://..."
+
+# Authentication
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
+
+# Email Service
+RESEND_API_KEY="re_your_api_key"
+
+# AI Service
+OPENAI_API_KEY="sk_your_openai_key"
+
+# Cron Protection
+CRON_SECRET="your-random-secret"
+
+# Application
+FROM_EMAIL="hello@heartschedule.app"
+FROM_NAME="HeartSchedule"
+```
+
+3. Set up the database
+
+```bash
+# Once you have a live DATABASE_URL, run migrations
+npx prisma migrate dev --name init
+
+# Or push schema to database
+npx prisma db push
+```
+
+4. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+HeartSchedule/
+├── app/                 # Next.js App Router pages
+│   ├── (auth)/         # Auth pages (login, signup)
+│   ├── (dashboard)/    # Protected dashboard pages
+│   ├── api/            # API routes
+│   └── page.tsx        # Landing page
+├── components/          # React components
+│   ├── ui/             # shadcn/ui components
+│   └── ...             # Feature components
+├── lib/                # Utilities and configurations
+│   ├── prisma.ts       # Prisma client
+│   └── ...             # Other utilities
+├── prisma/             # Database schema and migrations
+└── types/              # TypeScript types
+```
 
-## Learn More
+## Development Status
 
-To learn more about Next.js, take a look at the following resources:
+Currently in active development. See implementation plan in `.claude/plans/` for detailed roadmap.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Completed
+- [x] Project setup with Next.js, TypeScript, Tailwind CSS
+- [x] shadcn/ui component library integration
+- [x] Prisma ORM with PostgreSQL schema
+- [x] Database models for User and Message
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### In Progress
+- [ ] Authentication (NextAuth.js)
+- [ ] Landing page
+- [ ] Message creation flow
+- [ ] AI message generation
+- [ ] Email sending integration
+- [ ] Scheduling system
+- [ ] Dashboard
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT

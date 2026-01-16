@@ -23,8 +23,8 @@ export default async function DashboardPage() {
     },
   })
 
-  const pendingMessages = messages.filter((m) => m.status === "pending")
-  const sentMessages = messages.filter((m) => m.status === "sent")
+  const pendingMessages = messages.filter((m: { status: string }) => m.status === "pending")
+  const sentMessages = messages.filter((m: { status: string }) => m.status === "sent")
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">

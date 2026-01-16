@@ -1,13 +1,21 @@
 import OpenAI from "openai"
 
-const openai = new OpenAI({
-  baseURL: "https://openrouter.ai/api/v1",
-  apiKey: process.env.OPENROUTER_API_KEY,
-  defaultHeaders: {
-    "HTTP-Referer": "https://heartschedule.app",
-    "X-Title": "HeartSchedule",
-  },
-})
+// Lazy-load OpenAI client to avoid build-time initialization
+let openaiClient: OpenAI | null = null
+
+function getOpenAIClient() {
+  if (!openaiClient) {
+    openaiClient = new OpenAI({
+      baseURL: "https://openrouter.ai/api/v1",
+      apiKey: process.env.OPENROUTER_API_KEY,
+      defaultHeaders: {
+        "HTTP-Referer": "https://heartschedule.app",
+        "X-Title": "HeartSchedule",
+      },
+    })
+  }
+  return openaiClient
+}
 
 export type MessageTone = "warm" | "formal" | "casual" | "heartfelt"
 export type Occasion = "birthday" | "anniversary" | "apology" | "gratitude" | "congratulations" | "just_because" | "custom"
@@ -74,6 +82,7 @@ BODY:
 [your message body here]`
 
   try {
+    const openai = getOpenAIClient()
     const completion = await openai.chat.completions.create({
       model: "allenai/molmo-2-8b:free", // Free AllenAI Molmo model for text generation
       messages: [
